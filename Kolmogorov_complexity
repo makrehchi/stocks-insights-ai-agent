@@ -1,0 +1,36 @@
+# Import necessary libraries
+import zlib
+import matplotlib.pyplot as plt
+import numpy as np
+
+def kolmogorov_complexity_approximation(data: str) -> int:
+    """
+    Approximates Kolmogorov Complexity by compressing the input string using zlib.
+    The compressed length serves as an estimate of its complexity.
+    """
+    return len(zlib.compress(data.encode()))
+
+# Define example strings with different levels of complexity
+example_strings = {
+    "Repeating 'A'": "AAAAAAAAAAAAAAAAAAAAAAAAAAAA",  # Highly compressible
+    "AB Pattern": "ABABABABABABABABABABABABABAB",  # Repetitive but more varied
+    "Natural Language": "The quick brown fox jumps over the lazy dog",  # Real text with some structure
+    "Random String": "X7&@9BzQkP$#*LmN!oP"  # Highly random, minimal compression
+}
+
+# Compute approximate Kolmogorov complexity for each string
+complexities = {label: kolmogorov_complexity_approximation(text) for label, text in example_strings.items()}
+
+# Create a bar plot to visualize the complexity
+plt.figure(figsize=(10, 6))
+plt.bar(complexities.keys(), complexities.values(), color=['blue', 'green', 'orange', 'red'])
+plt.xlabel("String Type")
+plt.ylabel("Approximate Kolmogorov Complexity")
+plt.title("Kolmogorov Complexity Approximation Using Compression")
+plt.ylim(min(complexities.values()) - 2, max(complexities.values()) + 2)  # Adjust limits for better visualization
+
+# Display values on bars
+for i, (label, value) in enumerate(complexities.items()):
+    plt.text(i, value + 0.5, str(value), ha='center', fontsize=12)
+
+plt.show()
